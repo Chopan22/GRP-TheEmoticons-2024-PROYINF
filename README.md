@@ -6,7 +6,7 @@
 
 - Nicolas Berenguela  000000000-0
 - Francisco Cárdenas  202104544-9
-- Cristobal Tirado    000000000-0
+- Cristobal Tirado    202104586-4
   
 --------
 
