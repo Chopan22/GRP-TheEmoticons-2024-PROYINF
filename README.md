@@ -10,6 +10,6 @@
   
 --------
 
-### [Wiki](https://www.youtube.com/watch?v=dQw4w9WgXcQ "Wiki")
+### [Wiki](https://github.com/Chopan22/GRP-CodeConvergence-2024-PROYINF/wiki "Wiki")
 
 ## Aspectos Técnicos
