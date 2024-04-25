@@ -16,28 +16,30 @@ cornerstoneWADOImageLoader.configure({
 });
 
 function Dicom() {
-  const [file, setFile] = useState(null);
+    const [file, setFile] = useState(null);
 
-  const onFileChange = (event) => {
-    setFile(URL.createObjectURL(event.target.files[0]));
-  };
+    const onFileChange = (event) => {
+        const file = event.target.files[0];
+        const url = URL.createObjectURL(file);
+        console.log(url)
+        setFile(url);
+    };
 
-  const onFileUpload = () => {
-    const imageId = cornerstoneWADOImageLoader.wadouri.fileManager.add(file);
-    cornerstone.loadImage('wadouri:' + imageId).then((image) => {
-      const element = document.getElementById('dicomImage');
-      cornerstone.enable(element);
-      cornerstone.displayImage(element, image);
-    });
-  };
+    const onFileUpload = () => {
+        cornerstone.loadImage('wadouri:' + file).then((image) => {
+        const element = document.getElementById('dicomImage');
+        cornerstone.enable(element);
+        cornerstone.displayImage(element, image);
+        });
+    };
 
-  return (
-    <div>
-      <input type="file" onChange={onFileChange} />
-      <button onClick={onFileUpload}>Upload</button>
-      <div id="dicomImage" style={{width: '512px', height: '512px'}}></div>
-    </div>
-  );
+    return (
+        <div>
+            <input type="file" onChange={onFileChange} />
+            <button onClick={onFileUpload}>Upload</button>
+            <div id="dicomImage" style={{width: '512px', height: '512px'}}></div>
+        </div>
+    );
 }
 
 export default Dicom;
