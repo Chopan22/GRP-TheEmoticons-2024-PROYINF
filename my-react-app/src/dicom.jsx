@@ -37,7 +37,7 @@ function Dicom() {
     };
 
     return (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <input type="file" onChange={onFileChange} />
             <button onClick={onFileUpload}>Enviar Imagen</button>
             <div id="dicomImage" style={{width: '512px', height: '512px'}}></div>

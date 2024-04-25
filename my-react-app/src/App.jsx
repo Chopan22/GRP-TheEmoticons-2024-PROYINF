@@ -1,6 +1,6 @@
 import React from 'react';
 import Dicom from './dicom.jsx';
-
+import './App.css'
 function App() {
   return (
     <div>
