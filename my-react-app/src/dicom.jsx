@@ -9,11 +9,24 @@ cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
 
 // Sin esto simplemente no funciona, pero aqui habría que poner algun tipo de credencial en el caso de usar un servidor
 cornerstoneWADOImageLoader.configure({
-  beforeSend: function(xhr) {
-    // Add custom headers here (e.g. auth tokens)
-    // xhr.setRequestHeader('x-auth-token', 'my auth token');
-  },
+    useWebWorkers: true,
+    decodeConfig: {
+      convertFloatPixelDataToInt: false,
+    },
 });
+
+var config = {
+    maxWebWorkers: navigator.hardwareConcurrency || 1,
+    startWebWorkersOnDemand: false,
+    taskConfiguration: {
+      decodeTask: {
+        initializeCodecsOnStartup: true,
+        strict: false,
+      },
+    },
+};
+  
+cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
 
 function Dicom() {
     const [file, setFile] = useState(null);
