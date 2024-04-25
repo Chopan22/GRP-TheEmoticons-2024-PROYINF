@@ -15,6 +15,8 @@ cornerstoneWADOImageLoader.configure({
     },
 });
 
+// Esta configuración optimiza la cantidad de recursos para usar la mayor cantidad de nucleos
+// disponibles para renderizar la imagen
 var config = {
     maxWebWorkers: navigator.hardwareConcurrency || 1,
     startWebWorkersOnDemand: false,
@@ -26,6 +28,7 @@ var config = {
     },
 };
   
+// Aplica la configuración 
 cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
 
 function Dicom() {
