@@ -3,11 +3,11 @@ import cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import dicomParser from 'dicom-parser';
 
-// Initialize the cornerstoneWADOImageLoader library
+// Esto sirve para inicializar los lectores de images DICOM, WADO es un alias para referirse a "Web Access to Dicom Objects"
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
 cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
 
-// Register the prefixes for the image loader
+// Sin esto simplemente no funciona, pero aqui habría que poner algun tipo de credencial en el caso de usar un servidor
 cornerstoneWADOImageLoader.configure({
   beforeSend: function(xhr) {
     // Add custom headers here (e.g. auth tokens)
@@ -18,6 +18,8 @@ cornerstoneWADOImageLoader.configure({
 function Dicom() {
     const [file, setFile] = useState(null);
 
+    // Cuando subes una imagen a la pagina, transforma la imagen en un url para luego mostrarla, si no hacemos esto
+    // entonces en cualquier buscador tirara un error diciendo que por politica CORS no puede funcionar
     const onFileChange = (event) => {
         const file = event.target.files[0];
         const url = URL.createObjectURL(file);
@@ -25,6 +27,7 @@ function Dicom() {
         setFile(url);
     };
 
+    // Efectivamente renderiza la imagen DICOM que nosotros subimos en la pagina web
     const onFileUpload = () => {
         cornerstone.loadImage('wadouri:' + file).then((image) => {
         const element = document.getElementById('dicomImage');
@@ -36,7 +39,7 @@ function Dicom() {
     return (
         <div>
             <input type="file" onChange={onFileChange} />
-            <button onClick={onFileUpload}>Upload</button>
+            <button onClick={onFileUpload}>Enviar Imagen</button>
             <div id="dicomImage" style={{width: '512px', height: '512px'}}></div>
         </div>
     );

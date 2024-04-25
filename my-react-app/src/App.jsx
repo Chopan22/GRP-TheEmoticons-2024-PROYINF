@@ -4,7 +4,7 @@ import Dicom from './dicom.jsx';
 function App() {
   return (
     <div>
-      <h1>Upload and View DICOM Files</h1>
+      <h1>Visor de imagenes DICOM</h1>
       <Dicom />
     </div>
   );
