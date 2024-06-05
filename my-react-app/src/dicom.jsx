@@ -33,6 +33,9 @@ cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
 
 function Dicom() {
     const [file, setFile] = useState(null);
+    const [dicomData, setDicomData] = useState(null);
+
+    
 
     // Cuando subes una imagen a la pagina, transforma la imagen en un url para luego mostrarla, si no hacemos esto
     // entonces en cualquier buscador tirara un error diciendo que por politica CORS no puede funcionar
@@ -46,17 +49,43 @@ function Dicom() {
     // Efectivamente renderiza la imagen DICOM que nosotros subimos en la pagina web
     const onFileUpload = () => {
         cornerstone.loadImage('wadouri:' + file).then((image) => {
-        const element = document.getElementById('dicomImage');
-        cornerstone.enable(element);
-        cornerstone.displayImage(element, image);
+            const element = document.getElementById('dicomImage');
+            cornerstone.enable(element);
+            cornerstone.displayImage(element, image);
+
+            // Llamada a la nueva función getMetaData
+            getMetaData(image);
+
+        }).catch(error => {
+            // Manejo de errores en caso de que la carga de la imagen falle
+            console.error('Error al cargar la imagen DICOM: ', error);
         });
     };
+
+    async function getMetaData(image) {
+        try {
+            const metaData = await cornerstone.metaData.get('all', image.imageId);
+            console.log('Metadatos DICOM: ', metaData);
+            setDicomData(metaData);
+        } catch (error) {
+            console.error('No se pudieron recuperar los metadatos.', error);
+        }
+    }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <input type="file" onChange={onFileChange} />
             <button onClick={onFileUpload}>Enviar Imagen</button>
             <div id="dicomImage" style={{width: '512px', height: '512px'}}></div>
+            {dicomData && (
+                <div>
+                    <h2>Metadatos DICOM</h2>
+                    <p><strong>Paciente:</strong> {dicomData.patientName}</p>
+                    <p><strong>ID del Estudio:</strong> {dicomData.studyInstanceUID}</p>
+                    <p><strong>Fecha del Estudio:</strong> {dicomData.studyDate}</p>
+                    {/* ... otros metadatos que desees mostrar */}
+                </div>
+            )}
         </div>
     );
 }
