@@ -51,10 +51,25 @@ function Dicom() {
 
 
             const metadatos = {
-                patientName: image.data.string('x00100010'),
-                patientID: image.data.string('x00100020'),
-                studyDate: image.data.string('x00080020'),
-                modality: image.data.string('x00080060'),
+                patientName: image.data.string('x00100010'), // Nombre del paciente
+                patientID: image.data.string('x00100020'), // ID del paciente
+                studyDate: image.data.string('x00080020'), // Fecha del estudio
+                studyTime: image.data.string('x00080030'), // Hora del estudio
+                accessionNumber: image.data.string('x00080050'), // Número de acceso
+                modality: image.data.string('x00080060'), // Modalidad
+                institutionName: image.data.string('x00080080'), // Nombre de la institución
+                physicianOfRecord: image.data.string('x00081048'), // Médico que registra
+                performingPhysicianName: image.data.string('x00081050'), // Nombre del médico que realizó el estudio
+                patientBirthDate: image.data.string('x00100030'), // Fecha de nacimiento del paciente
+                patientSex: image.data.string('x00100040'), // Sexo del paciente
+                patientWeight: image.data.floatString('x00101030'), // Peso del paciente
+                patientSize: image.data.floatString('x00101020'), // Talla del paciente (altura)
+                patientAddress: image.data.string('x00101040'), // Dirección del paciente
+                studyID: image.data.string('x00200010'), // ID del estudio
+                seriesNumber: image.data.string('x00200011'), // Número de serie
+                studyInstanceUID: image.data.string('x0020000D'), // UID de la instancia del estudio
+                seriesInstanceUID: image.data.string('x0020000E'), // UID de la instancia de la serie
+                imageNumber: image.data.string('x00200013'), // Número de imagen
             };
 
             console.log("metadatos DICOM", metadatos);
@@ -81,9 +96,15 @@ function Dicom() {
                 <div>
                     <h2>Metadatos DICOM</h2>
                     <p><strong>Paciente:</strong> {dicomData.patientName}</p>
+                    <p><strong>ID Paciente:</strong> {dicomData.patientID}</p>
+                    <p><strong>Fecha Nacimiento:</strong> {dicomData.patientBirthDate}</p>
+                    <p><strong>Sexo:</strong> {dicomData.patientSex}</p>
                     <p><strong>ID del Estudio:</strong> {dicomData.studyInstanceUID}</p>
                     <p><strong>Fecha del Estudio:</strong> {dicomData.studyDate}</p>
-                    {/* ... otros metadatos que desees mostrar */}
+                    <p><strong>Nombre Institución:</strong> {dicomData.institutionName}</p>
+                    <p><strong>Modalidad:</strong> {dicomData.modality} </p>
+                    <p><strong>Numero Imagen: </strong> {dicomData.imageNumber}</p>
+                    
                 </div>
             )}
         </div>
