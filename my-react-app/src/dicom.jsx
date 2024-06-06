@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import dicomParser from 'dicom-parser';
@@ -35,8 +35,6 @@ function Dicom() {
     const [file, setFile] = useState(null);
     const [dicomData, setDicomData] = useState(null);
 
-    
-
     // Cuando subes una imagen a la pagina, transforma la imagen en un url para luego mostrarla, si no hacemos esto
     // entonces en cualquier buscador tirara un error diciendo que por politica CORS no puede funcionar
     const onFileChange = (event) => {
@@ -46,31 +44,33 @@ function Dicom() {
         setFile(url);
     };
 
+
     // Efectivamente renderiza la imagen DICOM que nosotros subimos en la pagina web
     const onFileUpload = () => {
         cornerstone.loadImage('wadouri:' + file).then((image) => {
+
+
+            const metadatos = {
+                patientName: image.data.string('x00100010'),
+                patientID: image.data.string('x00100020'),
+                studyDate: image.data.string('x00080020'),
+                modality: image.data.string('x00080060'),
+            };
+
+            console.log("metadatos DICOM", metadatos);
+
+            setDicomData(metadatos)
+
             const element = document.getElementById('dicomImage');
             cornerstone.enable(element);
             cornerstone.displayImage(element, image);
 
-            // Llamada a la nueva función getMetaData
-            getMetaData(image);
 
         }).catch(error => {
             // Manejo de errores en caso de que la carga de la imagen falle
             console.error('Error al cargar la imagen DICOM: ', error);
         });
     };
-
-    async function getMetaData(image) {
-        try {
-            const metaData = await cornerstone.metaData.get('all', image.imageId);
-            console.log('Metadatos DICOM: ', metaData);
-            setDicomData(metaData);
-        } catch (error) {
-            console.error('No se pudieron recuperar los metadatos.', error);
-        }
-    }
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
