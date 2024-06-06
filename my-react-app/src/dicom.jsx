@@ -88,25 +88,28 @@ function Dicom() {
     };
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <input type="file" onChange={onFileChange} />
-            <button onClick={onFileUpload}>Enviar Imagen</button>
-            <div id="dicomImage" style={{width: '512px', height: '512px'}}></div>
-            {dicomData && (
+        <div style={{ display: 'flex', justifyContent: 'center', height: '100vh', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '40px' }}>
+                {dicomData && (
+                    <div style={{ marginRight: '40px', textAlign: 'justify' }}> {/* Aumenta el espacio entre la imagen y el texto */}
+                        <h2 style={{ marginBottom: '10px' }}>Metadatos DICOM</h2> {/* Reduce el espacio entre el título y el texto */}
+                        <p><strong>Paciente:</strong> {dicomData.patientName}</p>
+                        <p><strong>ID Paciente:</strong> {dicomData.patientID}</p>
+                        <p><strong>Fecha Nacimiento:</strong> {dicomData.patientBirthDate}</p>
+                        <p><strong>Sexo:</strong> {dicomData.patientSex}</p>
+                        <p><strong>ID del Estudio:</strong> {dicomData.studyInstanceUID}</p>
+                        <p><strong>Fecha del Estudio:</strong> {dicomData.studyDate}</p>
+                        <p><strong>Nombre Institución:</strong> {dicomData.institutionName}</p>
+                        <p><strong>Modalidad:</strong> {dicomData.modality}</p>
+                        <p><strong>Numero Imagen:</strong> {dicomData.imageNumber}</p>
+                    </div>
+                )}
                 <div>
-                    <h2>Metadatos DICOM</h2>
-                    <p><strong>Paciente:</strong> {dicomData.patientName}</p>
-                    <p><strong>ID Paciente:</strong> {dicomData.patientID}</p>
-                    <p><strong>Fecha Nacimiento:</strong> {dicomData.patientBirthDate}</p>
-                    <p><strong>Sexo:</strong> {dicomData.patientSex}</p>
-                    <p><strong>ID del Estudio:</strong> {dicomData.studyInstanceUID}</p>
-                    <p><strong>Fecha del Estudio:</strong> {dicomData.studyDate}</p>
-                    <p><strong>Nombre Institución:</strong> {dicomData.institutionName}</p>
-                    <p><strong>Modalidad:</strong> {dicomData.modality} </p>
-                    <p><strong>Numero Imagen: </strong> {dicomData.imageNumber}</p>
-                    
+                    <input type="file" onChange={onFileChange} />
+                    <button onClick={onFileUpload}>Enviar Imagen</button>
+                    <div id="dicomImage" style={{width: '512px', height: '512px'}}></div>
                 </div>
-            )}
+            </div>
         </div>
     );
 }
