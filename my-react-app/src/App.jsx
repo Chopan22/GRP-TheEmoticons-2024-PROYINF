@@ -1,10 +1,12 @@
 import React from 'react';
 import Dicom from './dicom.jsx';
+import Navbar from './Navbar.jsx';
 import './App.css'
 function App() {
   return (
     <div>
-      <h1>Visor de imagenes DICOM</h1>
+      <Navbar />
+      
       <Dicom />
     </div>
   );
