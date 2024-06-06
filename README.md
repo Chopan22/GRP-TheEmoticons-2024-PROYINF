@@ -14,6 +14,6 @@
 
 --------
 
-[Video de explicación de prototipo](https://www.example.com/my%20great%20page](https://youtu.be/sxCb-kuqXd8)
+[Video de explicación de prototipo](https://youtu.be/sxCb-kuqXd8)
 
 ## Aspectos Técnicos
