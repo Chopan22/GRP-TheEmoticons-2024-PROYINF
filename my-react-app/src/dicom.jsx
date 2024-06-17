@@ -3,7 +3,9 @@ import cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import dicomParser from 'dicom-parser';
 
+import { run, client } from "./assets/db/db"
 
+run();
 
 // Esto sirve para inicializar los lectores de images DICOM, WADO es un alias para referirse a "Web Access to Dicom Objects"
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
