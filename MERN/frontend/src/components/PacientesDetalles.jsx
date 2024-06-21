@@ -15,6 +15,8 @@ const PacienteDetalles = ({ paciente}) => {
             </div>
             
         </div>
+
+        
     )
 }
 
