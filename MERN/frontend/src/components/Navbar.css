@@ -1,0 +1,42 @@
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 60px;
+    font-weight: bold;
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+}
+
+.nav-logo{
+    font-size: 3.2em;
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    
+    color: rgba(255, 255, 255, 0.87);
+}
+
+.nav-menu{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    font-size: 18px;
+    gap: 90px;
+    text-decoration: none;
+    
+}
+
+.nav-search{
+    margin-left: auto;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.nav-login{
+    border-radius: 50px;
+    padding: 10px 38px;
+    background: rgba(255, 255, 255, 0.87);
+    color: #242424;
+}
