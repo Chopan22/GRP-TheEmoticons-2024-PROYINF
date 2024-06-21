@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import '../assets/css/Pacientes.css'
+
+// Componentes
+import PacienteDetalles from "../components/PacientesDetalles";
 
 const Pacientes = () => {
     const [pacientes, setPacientes] = useState([]);
@@ -22,7 +26,7 @@ const Pacientes = () => {
             <div className="pacientes">
                 {pacientes.length > 0 ? (
                     pacientes.map((paciente) => (
-                        <p key={paciente._id}>{paciente.nombre}</p>
+                        <PacienteDetalles key={paciente._id} paciente={paciente} />
                     ))
                 ) : (
                     <p>No hay pacientes disponibles.</p>

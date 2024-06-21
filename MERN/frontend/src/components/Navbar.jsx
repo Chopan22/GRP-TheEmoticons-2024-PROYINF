@@ -9,7 +9,7 @@ const Navbar = () => {
             <ul className='nav-menu'>
 
                 <li><Link to="/">Home</Link></li>
-                <li>Pacientes</li>
+                <li><Link to="/pacientes">Pacientes</Link></li>
                 <input type="text" placeholder="Buscar Paciente" className="nav-search" />
                 <li className='nav-login'>Login</li>
             </ul>

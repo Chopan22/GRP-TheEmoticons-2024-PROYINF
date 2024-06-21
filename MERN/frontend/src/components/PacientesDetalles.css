@@ -1,0 +1,16 @@
+.pacientes-detalles{
+    display: flex;
+    flex-wrap: wrap;
+    text-align: left;
+}
+
+.card{
+    width: 500px;
+    height: 300px;
+    margin: 10px;
+    
+    box-shadow: 0 0 24px rgba(189, 187, 187, 0.15);
+    border-radius: 9px;
+    background-color: #282828;
+
+}
