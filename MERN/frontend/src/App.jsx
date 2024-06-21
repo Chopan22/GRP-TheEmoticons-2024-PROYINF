@@ -18,6 +18,8 @@ function App() {
 						<Route path="/" element={<Home />}/>
 						<Route path="/dicom" element={<Dicom/>}/>
 						<Route path="/pacientes" element={<Pacientes/>}/>
+
+						
 					</Routes>
 				</div>
 			</BrowserRouter>
