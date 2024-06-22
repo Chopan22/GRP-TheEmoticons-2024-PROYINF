@@ -14,7 +14,7 @@ export const PacientesReducer = (state, action) => {
             }
         case 'DELETE_PACIENTE':
             return {
-
+                pacientes: state.pacientes.filter((p) => p._id !== action.payload._id)
             }
         default:
             return state

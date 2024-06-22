@@ -1,5 +1,7 @@
 import './PacientesDetalles.css'
 import deleteIcon from '../assets/delete-user-1.svg'
+import axios from 'axios';
+import { UsarPacienteContexto } from '../hooks/UsarPacienteContexto';
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -10,14 +12,24 @@ function formatDate(dateString) {
     return `${day}/${month}/${year}`;
 }
 
+
 const PacienteDetalles = ({ paciente}) => {
+
+    const {dispatch} = UsarPacienteContexto()
+
+    const handleClick = async () => {
+        const response = await axios.delete('http://localhost:4000/api/pacientes/' + paciente._id);
+        // setPacientes(response.data); // Aquí accedemos a la propiedad data
+        dispatch({type: 'DELETE_PACIENTE', payload: response.data})
+    }
+    
     return (
         <div className="pacientes-detalles">
             <div className="card"> 
                 <div className="card-title">
                     <h2 className='nombre-pacientes'> { paciente.nombre}</h2>
 
-                    <img src={deleteIcon} alt="Eliminar" className="delete-paciente" />
+                    <img src={deleteIcon} alt="Eliminar" className="delete-paciente" onClick={handleClick}/>
                 </div>
                 <p><strong> Rut: </strong>{paciente.rut}</p>
                 <p><strong> Fecha de Nacimiento: </strong>{formatDate(paciente.fecha_nacimiento)}</p>
