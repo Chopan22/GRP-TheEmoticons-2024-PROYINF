@@ -1,4 +1,5 @@
 import './PacientesDetalles.css'
+import deleteIcon from '../assets/delete-user-1.svg'
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -13,8 +14,11 @@ const PacienteDetalles = ({ paciente}) => {
     return (
         <div className="pacientes-detalles">
             <div className="card"> 
+                <div className="card-title">
+                    <h2 className='nombre-pacientes'> { paciente.nombre}</h2>
 
-                <h2 className='nombre-pacientes'> { paciente.nombre}</h2>
+                    <img src={deleteIcon} alt="Eliminar" className="delete-paciente" />
+                </div>
                 <p><strong> Rut: </strong>{paciente.rut}</p>
                 <p><strong> Fecha de Nacimiento: </strong>{formatDate(paciente.fecha_nacimiento)}</p>
                 <p><strong> Sexo: </strong>{paciente.sexo}</p>
