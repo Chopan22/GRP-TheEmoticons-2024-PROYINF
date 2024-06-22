@@ -21,7 +21,7 @@ const PacienteDetalles = ({ paciente}) => {
                 <p><strong> Telefono: </strong>{paciente.telefono}</p>
                 <p><strong> Ingresado al Hospital: </strong>{formatDate(paciente.createdAt)}</p>
                 <div className="container">
-                    <button class="button-24" role="button"> Revisar Perfil </button>
+                    <button className="button-24" role="button"> Revisar Perfil </button>
                 </div>
                 
 
