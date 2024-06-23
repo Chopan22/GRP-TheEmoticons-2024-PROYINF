@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const validador = require('validator');
+
+
 const Schema = mongoose.Schema;
 
 const Usuario = new Schema({
@@ -37,6 +40,20 @@ const Usuario = new Schema({
 
 // Metodo creado para que no nos destruyan la bd
 Usuario.statics.signup = async function(rut_doctor, nombre, apellido, sexo, email, password, specialization){
+    
+    // Validación de los datos previo a inserción en la base de datos
+    if (!email || !password || !rut_doctor || !nombre || !apellido || !sexo || !specialization){
+        throw Error('Todos los campos deben ser rellenados')
+    }
+
+    if (!validador.isEmail(email)){
+        throw Error('El email no es valido')
+    }
+
+    if (!validador.isStrongPassword(password)){
+        throw Error('La contraseña no es suficientemente segura')
+    }
+    
     const existe = await this.findOne({ email })
 
     if (existe) {
