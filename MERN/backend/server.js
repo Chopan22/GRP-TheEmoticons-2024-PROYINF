@@ -7,7 +7,10 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 
 
-const loginRoutes = require('./routes/pacientes')
+const pacientesRoutes = require('./routes/pacientes')
+
+const usuariosRoutes = require('./routes/usuarios')
+
 
 
 // Crea la app express
@@ -23,7 +26,9 @@ app.use((req, res, next) => {
 })
 
 
-app.use('/api/pacientes',loginRoutes)
+app.use('/api/pacientes',pacientesRoutes)
+app.use('/api/usuarios',usuariosRoutes)
+
 // Conectarse a la BD 
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
