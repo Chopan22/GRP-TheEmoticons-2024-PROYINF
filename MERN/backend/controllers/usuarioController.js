@@ -8,7 +8,16 @@ const loginUsuario = async (req, res) => {
 
 // Añadir a un usuario
 const signupUsuario = async (req, res) => {
-    res.json({mssg: 'Usuario inscrito'})
+
+    const {rut_doctor, nombre, apellido, sexo, email, password, specialization} = req.body
+
+    try {
+        const user = await Usuario.signup(rut_doctor, nombre, apellido, sexo, email, password, specialization)
+
+        res.status(200).json({email, user})
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
 }
 
 

@@ -36,7 +36,7 @@ const Usuario = new Schema({
 }, {timestamps: true})
 
 // Metodo creado para que no nos destruyan la bd
-Usuario.statics.signup = async(email, password) => {
+Usuario.statics.signup = async function(rut_doctor, nombre, apellido, sexo, email, password, specialization){
     const existe = await this.findOne({ email })
 
     if (existe) {
