@@ -9,7 +9,18 @@ const crearToken = (_id) => {
 
 // Logear a un usuario
 const loginUsuario = async (req, res) => {
-    res.json({mssg: 'usuario logeado'})
+    const {email, password} = req.body
+
+    try {
+        const user = await Usuario.login(email, password)
+
+        // Crear el Token
+        const token = crearToken(user._id)
+
+        res.status(200).json({email, token})
+    } catch (error) {
+        res.status(400).json({error: error.message})
+    }
 }
 
 // Añadir a un usuario

@@ -38,7 +38,7 @@ const Usuario = new Schema({
     }
 }, {timestamps: true})
 
-// Metodo creado para que no nos destruyan la bd
+// Metodo creado para hacerle signup a un usuario
 Usuario.statics.signup = async function(rut_doctor, nombre, apellido, sexo, email, password, specialization){
     
     // Validación de los datos previo a inserción en la base de datos
@@ -75,6 +75,27 @@ Usuario.statics.signup = async function(rut_doctor, nombre, apellido, sexo, emai
         specialization
     })
 
+    return user
+}
+
+
+// Metodo estatico para el proceso de login
+
+Usuario.statics.login = async function(email, password){
+    if (!email || !password){
+        throw Error('Todos los campos deben ser rellenados')
+    }
+
+    const user = await this.findOne({ email })
+    if (!user) {
+        throw Error('Direccion de correo no encontrada')
+    }
+
+    const match = await bcrypt.compare(password, user.password)
+    if (!match){
+        throw Error('Contraseña incorrecta')
+    }
+    
     return user
 }
 
