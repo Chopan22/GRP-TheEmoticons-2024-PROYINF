@@ -1,7 +1,13 @@
 const Usuario = require('../models/UsuarioModel')
+const jwt = require('jsonwebtoken') // Esto nos va a ayudar con la validación del personas y los logins 
+
+
+
+const crearToken = (_id) => {
+    return jwt.sign({_id: _id}, process.env.SECRET, {expiresIn: '3d'})
+}
 
 // Logear a un usuario
-
 const loginUsuario = async (req, res) => {
     res.json({mssg: 'usuario logeado'})
 }
@@ -14,7 +20,10 @@ const signupUsuario = async (req, res) => {
     try {
         const user = await Usuario.signup(rut_doctor, nombre, apellido, sexo, email, password, specialization)
 
-        res.status(200).json({email, user})
+        // Crear el Token
+        const token = crearToken(user._id)
+
+        res.status(200).json({email, token})
     } catch (error) {
         res.status(400).json({error: error.message})
     }
