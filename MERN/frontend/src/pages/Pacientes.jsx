@@ -21,7 +21,7 @@ const Pacientes = () => {
         };
 
         fetchPacientes();
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="home">
