@@ -6,10 +6,13 @@ const {
     crearPaciente,
     borrarPaciente,
     modificarPaciente
-} = require('../controllers/pacienteController')
+} = require('../controllers/pacienteController');
+const requireAuth = require('../middleware/requireAuth');
 
 const router = express.Router();
 
+// Autenticacion para mostrar todos los pacientes
+router.use(requireAuth)
 
 // Obtener todos los Pacientes
 router.get('/', getPacientes) //FUNCIONA
