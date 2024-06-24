@@ -2,6 +2,7 @@ import './PacientesDetalles.css'
 import deleteIcon from '../assets/delete-user-1.svg'
 import axios from 'axios';
 import { UsarPacienteContexto } from '../hooks/UsarPacienteContexto';
+import { UsarAuthContexto } from '../hooks/UsarAuthContexto';
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -16,9 +17,19 @@ function formatDate(dateString) {
 const PacienteDetalles = ({ paciente}) => {
 
     const {dispatch} = UsarPacienteContexto()
+    const { user } = UsarAuthContexto()
 
     const handleClick = async () => {
-        const response = await axios.delete('http://localhost:4000/api/pacientes/' + paciente._id);
+        if (!user){
+            return console.log("No hay usuario papito")
+        }
+
+        
+        const response = await axios.delete('http://localhost:4000/api/pacientes/' + paciente._id,{
+            headers: {
+                'Authorization': `Bearer ${user.token}`
+            }
+        });
         // setPacientes(response.data); // Aquí accedemos a la propiedad data
         dispatch({type: 'DELETE_PACIENTE', payload: response.data})
     }
