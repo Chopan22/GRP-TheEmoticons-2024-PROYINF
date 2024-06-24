@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { UsarAuthContexto } from './hooks/UsarAuthContexto'
 
 import './App.css'
 
@@ -10,7 +11,10 @@ import Pacientes from './pages/Pacientes'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 
+
+
 function App() {
+	const { user } = UsarAuthContexto()
 	return (
 		<div className="App">
 			<BrowserRouter>
@@ -18,10 +22,10 @@ function App() {
 				<div className="pages">
 					<Routes>
 						<Route path="/" element={<Home />}/>
-						<Route path="/dicom" element={<Dicom/>}/>
-						<Route path="/pacientes" element={<Pacientes/>}/>
-						<Route path="/login" element={<Login/>}/>
-						<Route path="/signup" element={<Signup/>}/>
+						<Route path="/dicom" element={user ? <Dicom/> : <Navigate to="/login" />}/>
+						<Route path="/pacientes" element={user ? <Pacientes/> : <Navigate to="/login" />}/>
+						<Route path="/login" element={!user ? <Login/> : <Navigate to="/" />}/>
+						<Route path="/signup" element={!user ? <Signup/> : <Navigate to="/" />}/>
 
 						
 					</Routes>
