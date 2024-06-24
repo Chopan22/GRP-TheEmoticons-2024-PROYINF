@@ -22,7 +22,7 @@ export const usarSignup = () => {
         })
         .then(function(response){
             // Debería ser un simil a response.ok 
-            localStorage.setItem('usuario',response.data)
+            localStorage.setItem('usuario',JSON.stringify(response.data))
 
             // Actualizar el AuthContexto
             dispatch({type: 'LOGIN', payload: response.data})
