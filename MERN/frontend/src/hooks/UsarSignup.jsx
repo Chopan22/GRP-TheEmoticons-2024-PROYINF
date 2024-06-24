@@ -7,13 +7,18 @@ export const usarSignup = () => {
     const [isLoading, setIsLoading] = useState(null)
     const {dispatch} = UsarAuthContexto()
 
-    const signup = async (email, password) => {
+    const signup = async (rut, nombre, apellido, sexo, email, password, specialization) => {
         setIsLoading(true)
         setError(null)
 
         const response = axios.post('http://localhost:4000/api/usuarios/signup',{
+            rut_doctor: rut,
+            nombre: nombre,
+            apellido: apellido,
+            sexo: sexo,
             email: email,
-            password: password
+            password: password,
+            specialization: specialization
         })
         .then(function(response){
             // Debería ser un simil a response.ok 
