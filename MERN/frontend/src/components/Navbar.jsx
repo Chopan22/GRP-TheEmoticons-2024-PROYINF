@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom'
 import { UsarLogout } from '../hooks/UsarLogout'
+import { UsarAuthContexto } from '../hooks/UsarAuthContexto'
+
 import './Navbar.css'
 
 const Navbar = () => {
     const { logout } = UsarLogout()
+    const { user } = UsarAuthContexto()
 
     const handleClick = () => {
         logout()
@@ -19,13 +22,25 @@ const Navbar = () => {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/pacientes">Pacientes</Link></li>
                 <input type="text" placeholder="Buscar Paciente" className="nav-search" />
+                <nav>
 
+                    {user && (
+                        <div>
+                            <span>{user.email}</span>
+                            <button onClick={handleClick}>Log Out</button>
+                        </div>
+                    )}
+                    {!user && (
+                        <div> 
+                            <li className='nav-login'> <Link to="/login"> Login </Link> </li>
+                            <li className='nav-signup'> <Link to="/signup"> Signup </Link> </li>
+                        </div>
+                        
+                    )}
 
-                <div>
-                    <button onClick={handleClick}>Log Out</button>
-                </div>
-                <li className='nav-login'> <Link to="/login"> Login </Link> </li>
-                <li className='nav-signup'> <Link to="/signup"> Signup </Link> </li>
+                </nav>
+                
+                
             </ul>
         </div>
     )
