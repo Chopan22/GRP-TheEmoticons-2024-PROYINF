@@ -23,7 +23,7 @@ export const PacientesReducer = (state, action) => {
 
 export const PacientesContextoProveedor = ({ children }) => {
     const [state, dispatch] = useReducer(PacientesReducer, {
-        pacientes: null
+        pacientes: []
     })
 
     

@@ -27,7 +27,7 @@ const Paciente = new Schema({
     },
     doctor_rut: {
         type: String,
-        required: false
+        required: true
     },
     en_tratamiento: {
         type: Boolean,

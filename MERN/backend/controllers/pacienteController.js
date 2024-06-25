@@ -26,11 +26,12 @@ const getPaciente = async (req, res) => {
 
 // Agregar un nuevo paciente
 const crearPaciente = async(req ,res) => {
-    const {nombre, rut, fecha_nacimiento, sexo, telefono, doctor_rut, en_tratamiento} = req.body
+    const {nombre, rut, fecha_nacimiento, sexo, telefono} = req.body
 
     // Añadir el paciente a la BD
     try {
-        const paciente = await Paciente.create({nombre, rut, fecha_nacimiento, sexo, telefono, doctor_rut, en_tratamiento})
+        const user_id = req.user._id
+        const paciente = await Paciente.create({nombre, rut, fecha_nacimiento, sexo, telefono, doctor_rut: user_id, en_tratamiento: true})
         res.status(200).json(paciente)
     } catch (error) {
         res.status(400).json({error: error.message})
