@@ -3,6 +3,8 @@ import cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import dicomParser from 'dicom-parser';
 
+import { useLocation } from 'react-router-dom';
+
 
 // Esto sirve para inicializar los lectores de images DICOM, WADO es un alias para referirse a "Web Access to Dicom Objects"
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
@@ -32,9 +34,26 @@ var config = {
 // Aplica la configuración 
 cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
 
-function Dicom( { paciente }) {
+// Para que se vea ligeramente mejor la cuestion
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+}
+
+
+const Dicom = () => {
+    const location = useLocation()
+    const { paciente } = location.state || {} 
     const [file, setFile] = useState(null);
     const [dicomData, setDicomData] = useState(null);
+
+    // al peo si funciona xd
+
+    console.log(JSON.stringify(paciente))
 
     // Cuando subes una imagen a la pagina, transforma la imagen en un url para luego mostrarla, si no hacemos esto
     // entonces en cualquier buscador tirara un error diciendo que por politica CORS no puede funcionar
@@ -94,11 +113,11 @@ function Dicom( { paciente }) {
                 {dicomData && (
                     <div style={{ marginRight: '40px', textAlign: 'justify' }}> {/* Aumenta el espacio entre la imagen y el texto */}
                         <h2 style={{ marginBottom: '10px' }}>Metadatos DICOM</h2> {/* Reduce el espacio entre el título y el texto */}
-                        <p><strong>Paciente:</strong> {dicomData.patientName}</p>
-                        <p><strong>ID Paciente:</strong> {dicomData.patientID}</p>
-                        <p><strong>Fecha Nacimiento:</strong> {dicomData.patientBirthDate}</p>
-                        <p><strong>Sexo:</strong> {dicomData.patientSex}</p>
-                        <p><strong>ID del Estudio:</strong> {dicomData.studyInstanceUID}</p>
+                        <p><strong>Paciente:</strong> {dicomData.patientName} / {paciente.nombre} </p>
+                        <p><strong>ID Paciente:</strong> {dicomData.patientID} / {paciente.rut}</p>
+                        <p><strong>Fecha Nacimiento:</strong> {dicomData.patientBirthDate} / {formatDate(paciente.fecha_nacimiento)}</p>
+                        <p><strong>Sexo:</strong> {dicomData.patientSex} / {paciente.sexo} </p>
+                        <p><strong>ID del Estudio:</strong> {dicomData.studyInstanceUID} / {paciente._id}</p>
                         <p><strong>Fecha del Estudio:</strong> {dicomData.studyDate}</p>
                         <p><strong>Nombre Institución:</strong> {dicomData.institutionName}</p>
                         <p><strong>Modalidad:</strong> {dicomData.modality}</p>

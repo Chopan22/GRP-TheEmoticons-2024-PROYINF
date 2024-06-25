@@ -3,9 +3,8 @@ import deleteIcon from '../assets/delete-user-1.svg'
 import axios from 'axios';
 import { UsarPacienteContexto } from '../hooks/UsarPacienteContexto';
 import { UsarAuthContexto } from '../hooks/UsarAuthContexto';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-import { Dicom } from '../pages/Dicom'
 
 
 
@@ -25,6 +24,12 @@ const PacienteDetalles = ({ paciente}) => {
 
     const {dispatch} = UsarPacienteContexto()
     const { user } = UsarAuthContexto()
+
+    const navigate = useNavigate()
+
+    const handleRevisarPerfil = (paciente) => {
+        navigate('/dicom', { state: {paciente}})
+    }
 
     const handleClick = async () => {
         if (!user){
@@ -55,7 +60,13 @@ const PacienteDetalles = ({ paciente}) => {
                 <p><strong> Telefono: </strong>{paciente.telefono}</p>
                 <p><strong> Ingresado al Hospital: </strong>{formatDate(paciente.createdAt)}</p>
                 <div className="container">
-                    <button className="button-24" role="button"><Link to="/dicom"> Revisar Perfil </Link></button>
+                    <button 
+                        className="button-24" 
+                        role="button"
+                        onClick={() => handleRevisarPerfil(paciente)}
+                    >
+                        Revisar Perfil 
+                    </button>
                 </div>
                 
 
