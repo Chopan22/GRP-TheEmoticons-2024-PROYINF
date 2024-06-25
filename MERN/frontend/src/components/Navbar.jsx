@@ -26,7 +26,8 @@ const Navbar = () => {
 
                     {user && (
                         <div className="logged-in">
-                            <span className='intro' style ={{ fontsize: '1.5em' }}>Bienvenido {user.email}</span>
+                            <span className='intro' style ={{ fontsize: '1.5em' }}>Bienvenido</span>
+                            <span className='pacientesadd'> <Link to="/adduser"> Añadir Pacientes</Link></span>
                             <button onClick={handleClick}>Log Out</button>
                         </div>
                     )}
