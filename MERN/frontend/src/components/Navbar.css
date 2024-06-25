@@ -46,3 +46,20 @@
 .nav-login:hover{
     color: #535bf2;
 }
+
+.logged-in {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 400px;
+}
+
+.mininav {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px;
+}
+
+.intro {
+    align-items: left;
+}

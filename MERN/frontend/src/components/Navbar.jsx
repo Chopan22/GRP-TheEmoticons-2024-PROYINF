@@ -22,11 +22,11 @@ const Navbar = () => {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/pacientes">Pacientes</Link></li>
                 <input type="text" placeholder="Buscar Paciente" className="nav-search" />
-                <nav>
+                <nav className="mininav">
 
                     {user && (
-                        <div>
-                            <span>{user.email}</span>
+                        <div className="logged-in">
+                            <span className='intro' style ={{ fontsize: '1.5em' }}>Bienvenido {user.email}</span>
                             <button onClick={handleClick}>Log Out</button>
                         </div>
                     )}
