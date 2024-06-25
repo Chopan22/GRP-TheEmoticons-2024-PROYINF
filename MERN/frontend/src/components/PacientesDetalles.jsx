@@ -3,6 +3,13 @@ import deleteIcon from '../assets/delete-user-1.svg'
 import axios from 'axios';
 import { UsarPacienteContexto } from '../hooks/UsarPacienteContexto';
 import { UsarAuthContexto } from '../hooks/UsarAuthContexto';
+import { Link } from 'react-router-dom';
+
+import { Dicom } from '../pages/Dicom'
+
+
+
+
 
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -48,7 +55,7 @@ const PacienteDetalles = ({ paciente}) => {
                 <p><strong> Telefono: </strong>{paciente.telefono}</p>
                 <p><strong> Ingresado al Hospital: </strong>{formatDate(paciente.createdAt)}</p>
                 <div className="container">
-                    <button className="button-24" role="button"> Revisar Perfil </button>
+                    <button className="button-24" role="button"><Link to="/dicom"> Revisar Perfil </Link></button>
                 </div>
                 
 

@@ -32,7 +32,7 @@ var config = {
 // Aplica la configuración 
 cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
 
-function Dicom() {
+function Dicom( { paciente }) {
     const [file, setFile] = useState(null);
     const [dicomData, setDicomData] = useState(null);
 
