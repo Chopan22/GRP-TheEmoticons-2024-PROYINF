@@ -4,7 +4,10 @@ const mongoose = require('mongoose')
 
 // Obtener todos los pacientes
 const getPacientes = async (req, res) => {
-    const pacientes = await Paciente.find({}).sort({createdAt: -1});
+
+    const doctor_rut = req.user._id
+
+    const pacientes = await Paciente.find({doctor_rut}).sort({createdAt: -1});
 
     res.status(200).json(pacientes)
 }
