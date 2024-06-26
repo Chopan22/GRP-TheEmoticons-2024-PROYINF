@@ -7,3 +7,6 @@ El segundo tiene que estar creado en la direccion MERN/frontend (Correr "npm i" 
 
 
 Con el npm run dev de frontend puede dirigirse a la pagina donde esta creado todo el proceso
+
+
+Este proceso solo se ha comprobado que funcione en windows, no intentar en linux
