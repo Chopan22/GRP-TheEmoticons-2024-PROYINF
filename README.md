@@ -6,6 +6,7 @@
 
 - Francisco Cárdenas  202104544-9
 - José Luis Beltrán 202030548-k
+- Martín Rojas 201830023-3
   
 --------
 
