@@ -5,7 +5,7 @@
 ### Integrantes
 
 - Francisco Cárdenas  202104544-9
-- 
+- José Luis Beltrán 202030548-k
   
 --------
 
