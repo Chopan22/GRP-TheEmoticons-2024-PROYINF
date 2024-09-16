@@ -16,7 +16,7 @@ const Navbar = () => {
 
     return (
         <div className='nav'>
-            <div className='nav-logo'>CodeConvergence</div>
+            <div className='nav-logo'>TheEmoticons</div>
             <ul className='nav-menu'>
 
                 <li><Link to="/">Home</Link></li>
@@ -35,6 +35,7 @@ const Navbar = () => {
                         <div> 
                             <li className='nav-login'> <Link to="/login"> Login </Link> </li>
                             <li className='nav-signup'> <Link to="/signup"> Signup </Link> </li>
+                            <li className='nav-config'> <Link to="/config"> Configuración </Link> </li>
                         </div>
                         
                     )}
