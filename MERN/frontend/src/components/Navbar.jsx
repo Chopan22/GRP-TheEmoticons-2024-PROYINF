@@ -28,6 +28,7 @@ const Navbar = () => {
                         <div className="logged-in">
                             <span className='intro' style ={{ fontsize: '1.5em' }}>Bienvenido</span>
                             <span className='pacientesadd'> <Link to="/adduser"> Añadir Pacientes</Link></span>
+                            <span className='configuration'> <Link to="/config"> Configuración</Link></span>
                             <button onClick={handleClick}>Log Out</button>
                         </div>
                     )}
@@ -35,7 +36,6 @@ const Navbar = () => {
                         <div> 
                             <li className='nav-login'> <Link to="/login"> Login </Link> </li>
                             <li className='nav-signup'> <Link to="/signup"> Signup </Link> </li>
-                            <li className='nav-config'> <Link to="/config"> Configuración </Link> </li>
                         </div>
                         
                     )}
@@ -47,5 +47,8 @@ const Navbar = () => {
         </div>
     )
 }
+
+export default Navbar
+
 
 export default Navbar
