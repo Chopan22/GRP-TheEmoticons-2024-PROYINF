@@ -28,7 +28,7 @@ function App() {
 						<Route path="/pacientes" element={user ? <Pacientes/> : <Navigate to="/login" />}/>
 						<Route path="/login" element={!user ? <Login/> : <Navigate to="/" />}/>
 						<Route path="/signup" element={!user ? <Signup/> : <Navigate to="/" />}/>
-						<Route path="/config" element={!user ? <Config/> : <Navigate to="/" />}/>
+						<Route path="/config" element={<Config />}/>
 						<Route path="/adduser" element={<PacienteForm />}/> 
 
 						
@@ -42,3 +42,4 @@ function App() {
 
 
 export default App
+
