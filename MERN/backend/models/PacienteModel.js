@@ -29,6 +29,10 @@ const Paciente = new Schema({
         type: String,
         required: true
     },
+    archivo: {
+        type: String, 
+        required: false 
+    },
     en_tratamiento: {
         type: Boolean,
         require: true
