@@ -26,6 +26,11 @@ export const usarLogin = () => {
             console.log(response)
         })
         .catch(function (error){
+            if (error.response && error.response.data && error.response.data.error) {
+                setError(error.response.data.error); // 
+              } else {
+                setError('Algo salió mal. Intente de nuevo.'); // 
+              }
 
             setIsLoading(false)
             console.log(error)
