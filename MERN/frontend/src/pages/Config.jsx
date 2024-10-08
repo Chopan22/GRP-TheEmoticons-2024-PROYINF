@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { usarConfig } from "../hooks/UsarConfig"
 
+
 const Config = () =>{
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -47,6 +48,9 @@ const Config = () =>{
             {error && <div className="error"> { error} </div>}
         </form>
     )
+}
+
+export default Config
 }
 
 export default Config
