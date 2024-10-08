@@ -5,7 +5,7 @@ import requests
 class TestPacienteAPI(unittest.TestCase):
     
     def setUp(self):
-        self.base_url = "http://localhost:4000/routes/pacientes"
+        self.base_url = "http://localhost:4000/api/pacientes"
 
     def test_get_pacientes(self):
         response = requests.get(self.base_url)
