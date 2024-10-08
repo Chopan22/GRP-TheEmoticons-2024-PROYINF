@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import dicomParser from 'dicom-parser';
+import axios from 'axios'; 
 
 import { useLocation } from 'react-router-dom';
 
@@ -34,7 +35,7 @@ var config = {
 // Aplica la configuración 
 cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
 
-// Para que se vea ligeramente mejor la cuestion
+// Para que se vea ligeramente mejor 
 function formatDate(dateString) {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, '0');
@@ -51,7 +52,7 @@ const Dicom = () => {
     const [file, setFile] = useState(null);
     const [dicomData, setDicomData] = useState(null);
 
-    // al peo si funciona xd
+ 
 
     console.log(JSON.stringify(paciente))
 
@@ -64,11 +65,30 @@ const Dicom = () => {
         setFile(url);
     };
 
-
     // Efectivamente renderiza la imagen DICOM que nosotros subimos en la pagina web
-    const onFileUpload = () => {
-        cornerstone.loadImage('wadouri:' + file).then((image) => {
+    const onFileUpload = async () => {
+        if (!file) {
+            console.error("Por favor selecciona un archivo");
+            return;
+        }
 
+        const formData = new FormData();
+        formData.append('archivo', file);
+        formData.append('pacienteId', paciente._id); 
+
+        // Enviar el archivo al servidor
+        try {
+            const response = await axios.post('/api/pacientes/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log('Archivo subido:', response.data);
+        } catch (error) {
+            console.error('Error al subir el archivo:', error);
+        } 
+
+        cornerstone.loadImage('wadouri:' + file).then((image) => {
 
             const metadatos = {
                 patientName: image.data.string('x00100010'), // Nombre del paciente
@@ -102,7 +122,6 @@ const Dicom = () => {
 
 
         }).catch(error => {
-            // Manejo de errores en caso de que la carga de la imagen falle
             console.error('Error al cargar la imagen DICOM: ', error);
         });
     };
