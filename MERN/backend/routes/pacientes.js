@@ -1,5 +1,9 @@
 const express = require('express')
 const Paciente = require('../models/PacienteModel')
+const multer = require('multer');
+
+const upload = multer({ dest: 'uploads/' });
+
 const {
     getPaciente,
     getPacientes,
@@ -28,5 +32,30 @@ router.delete('/:id', borrarPaciente) //FUNCIONA
 
 // Actualizar a un paciente
 router.patch('/:id', modificarPaciente)
+
+// DICOM
+router.post('/upload', upload.single('archivo'), async (req, res) => {
+    try {
+        const pacienteId = req.body.pacienteId;
+
+        if (!req.file) {
+            return res.status(400).json({ error: 'No se ha subido ningún archivo.' });
+        }
+
+        const archivoPath = req.file.path; 
+
+        const paciente = await Paciente.findById(pacienteId);
+        if (!paciente) {
+            return res.status(404).json({ error: 'Paciente no encontrado.' });
+        }
+
+        paciente.archivo = archivoPath; 
+        await paciente.save();
+
+        res.status(200).json({ message: 'Archivo subido exitosamente', path: archivoPath });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
 module.exports = router
