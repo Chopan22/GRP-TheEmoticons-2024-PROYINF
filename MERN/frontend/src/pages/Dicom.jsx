@@ -1,71 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cornerstone from 'cornerstone-core';
 import cornerstoneWADOImageLoader from 'cornerstone-wado-image-loader';
 import dicomParser from 'dicom-parser';
+import cornerstoneTools from 'cornerstone-tools';
+import cornerstoneMath from 'cornerstone-math';
 import axios from 'axios'; 
-
 import { useLocation } from 'react-router-dom';
 
-
-// Esto sirve para inicializar los lectores de images DICOM, WADO es un alias para referirse a "Web Access to Dicom Objects"
+// Configuración de Cornerstone
 cornerstoneWADOImageLoader.external.cornerstone = cornerstone;
 cornerstoneWADOImageLoader.external.dicomParser = dicomParser;
+cornerstoneTools.external.cornerstone = cornerstone;
+cornerstoneTools.external.cornerstoneMath = cornerstoneMath;
 
-// Sin esto simplemente no funciona, pero aqui habría que poner algun tipo de credencial en el caso de usar un servidor
-cornerstoneWADOImageLoader.configure({
-    useWebWorkers: true,
-    decodeConfig: {
-      convertFloatPixelDataToInt: false,
-    },
+// Configuración de los web workers
+cornerstoneWADOImageLoader.webWorkerManager.initialize({
+    maxWebWorkers: navigator.hardwareConcurrency || 1,
+    startWebWorkersOnDemand: true,
+    taskConfiguration: {
+        decodeTask: { 
+            initializeCodecsOnStartup: true 
+        }
+    }
 });
 
-// Esta configuración optimiza la cantidad de recursos para usar la mayor cantidad de nucleos
-// disponibles para renderizar la imagen
-var config = {
-    maxWebWorkers: navigator.hardwareConcurrency || 1,
-    startWebWorkersOnDemand: false,
-    taskConfiguration: {
-      decodeTask: {
-        initializeCodecsOnStartup: true,
-        strict: false,
-      },
-    },
-};
-  
-// Aplica la configuración 
-cornerstoneWADOImageLoader.webWorkerManager.initialize(config);
-
-// Para que se vea ligeramente mejor 
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
-    const year = date.getFullYear();
-
-    return `${day}/${month}/${year}`;
-}
-
-
 const Dicom = () => {
-    const location = useLocation()
-    const { paciente } = location.state || {} 
+    const location = useLocation();
+    const { paciente } = location.state || {};
     const [file, setFile] = useState(null);
     const [dicomData, setDicomData] = useState(null);
+    const [zoom, setZoom] = useState(1);
+    const [rotation, setRotation] = useState(0);
+    const [brightness, setBrightness] = useState(100);
+    const [contrast, setContrast] = useState(100);
+    const [sepia, setSepia] = useState(0);
+    const [invert, setInvert] = useState(0);
+    const [hueRotate, setHueRotate] = useState(0);
+    const [image, setImage] = useState(null);
 
- 
+    // Estados para arrastrar la imagen
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [startY, setStartY] = useState(0);
 
-    console.log(JSON.stringify(paciente))
-
-    // Cuando subes una imagen a la pagina, transforma la imagen en un url para luego mostrarla, si no hacemos esto
-    // entonces en cualquier buscador tirara un error diciendo que por politica CORS no puede funcionar
     const onFileChange = (event) => {
-        const file = event.target.files[0];
-        const url = URL.createObjectURL(file);
-        console.log(url)
+        const selectedFile = event.target.files[0];
+        const url = URL.createObjectURL(selectedFile);
         setFile(url);
     };
 
-    // Efectivamente renderiza la imagen DICOM que nosotros subimos en la pagina web
     const onFileUpload = async () => {
         if (!file) {
             console.error("Por favor selecciona un archivo");
@@ -76,7 +59,6 @@ const Dicom = () => {
         formData.append('archivo', file);
         formData.append('pacienteId', paciente._id); 
 
-        // Enviar el archivo al servidor
         try {
             const response = await axios.post('/api/pacientes/upload', formData, {
                 headers: {
@@ -88,71 +70,201 @@ const Dicom = () => {
             console.error('Error al subir el archivo:', error);
         } 
 
-        cornerstone.loadImage('wadouri:' + file).then((image) => {
-
+        cornerstone.loadImage('wadouri:' + file).then((loadedImage) => {
             const metadatos = {
-                patientName: image.data.string('x00100010'), // Nombre del paciente
-                patientID: image.data.string('x00100020'), // ID del paciente
-                studyDate: image.data.string('x00080020'), // Fecha del estudio
-                studyTime: image.data.string('x00080030'), // Hora del estudio
-                accessionNumber: image.data.string('x00080050'), // Número de acceso
-                modality: image.data.string('x00080060'), // Modalidad
-                institutionName: image.data.string('x00080080'), // Nombre de la institución
-                physicianOfRecord: image.data.string('x00081048'), // Médico que registra
-                performingPhysicianName: image.data.string('x00081050'), // Nombre del médico que realizó el estudio
-                patientBirthDate: image.data.string('x00100030'), // Fecha de nacimiento del paciente
-                patientSex: image.data.string('x00100040'), // Sexo del paciente
-                patientWeight: image.data.floatString('x00101030'), // Peso del paciente
-                patientSize: image.data.floatString('x00101020'), // Talla del paciente (altura)
-                patientAddress: image.data.string('x00101040'), // Dirección del paciente
-                studyID: image.data.string('x00200010'), // ID del estudio
-                seriesNumber: image.data.string('x00200011'), // Número de serie
-                studyInstanceUID: image.data.string('x0020000D'), // UID de la instancia del estudio
-                seriesInstanceUID: image.data.string('x0020000E'), // UID de la instancia de la serie
-                imageNumber: image.data.string('x00200013'), // Número de imagen
+                patientName: loadedImage.data.string('x00100010'),
+                patientID: loadedImage.data.string('x00100020'),
+                patientBirthDate: loadedImage.data.string('x00100030'),
+                patientSex: loadedImage.data.string('x00100040'),
+                studyInstanceUID: loadedImage.data.string('x0020000D'),
+                studyDate: loadedImage.data.string('x00080020'),
+                institutionName: loadedImage.data.string('x00080080'),
+                modality: loadedImage.data.string('x00080060'),
+                imageNumber: loadedImage.data.string('x00200013')
             };
 
-            console.log("metadatos DICOM", metadatos);
-
-            setDicomData(metadatos)
+            setDicomData(metadatos);
+            setImage(loadedImage);
 
             const element = document.getElementById('dicomImage');
             cornerstone.enable(element);
-            cornerstone.displayImage(element, image);
-
-
+            cornerstone.displayImage(element, loadedImage);
+            updateViewport(); // Actualizamos la vista inicial
         }).catch(error => {
             console.error('Error al cargar la imagen DICOM: ', error);
         });
+    };
+
+    const updateViewport = () => {
+        if (image) {
+            const element = document.getElementById('dicomImage');
+            const viewport = cornerstone.getViewport(element);
+            viewport.scale = zoom;
+            viewport.rotation = rotation;
+            cornerstone.setViewport(element, viewport);
+        }
+    };
+
+    useEffect(() => {
+        updateViewport();
+    }, [zoom, rotation, image]);
+
+    // Manejadores para arrastrar la imagen
+    const onMouseDown = (e) => {
+        setIsDragging(true);
+        setStartX(e.clientX);
+        setStartY(e.clientY);
+    };
+
+    const onMouseMove = (e) => {
+        if (!isDragging) return;
+
+        const element = document.getElementById('dicomImage');
+        const viewport = cornerstone.getViewport(element);
+        
+        // Calculamos el desplazamiento
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        // Invertir la dirección del movimiento
+        viewport.translation.x += dx;
+        viewport.translation.y += dy;
+
+        cornerstone.setViewport(element, viewport);
+
+        // Actualizamos la posición inicial
+        setStartX(e.clientX);
+        setStartY(e.clientY);
+    };
+
+    const onMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    // Manejador para el zoom con la rueda del mouse
+    const onWheel = (e) => {
+        e.preventDefault(); // Evitar el scroll de la página
+
+        const zoomFactor = 0.1; // Ajusta este valor según lo necesites
+        const newZoom = e.deltaY < 0 ? zoom + zoomFactor : zoom - zoomFactor;
+        setZoom(Math.max(1, Math.min(newZoom, 3)));
     };
 
     return (
         <div style={{ display: 'flex', justifyContent: 'center', height: '100vh', alignItems: 'center' }}>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '40px' }}>
                 {dicomData && (
-                    <div style={{ marginRight: '40px', textAlign: 'justify' }}> {/* Aumenta el espacio entre la imagen y el texto */}
-                        <h2 style={{ marginBottom: '10px' }}>Metadatos DICOM</h2> {/* Reduce el espacio entre el título y el texto */}
+                    <div style={{ marginRight: '40px', textAlign: 'justify' }}>
+                        <h2 style={{ marginBottom: '10px' }}>Metadatos DICOM</h2>
                         <p><strong>Paciente:</strong> {dicomData.patientName} / {paciente.nombre} </p>
                         <p><strong>ID Paciente:</strong> {dicomData.patientID} / {paciente.rut}</p>
-                        <p><strong>Fecha Nacimiento:</strong> {dicomData.patientBirthDate} / {formatDate(paciente.fecha_nacimiento)}</p>
+                        <p><strong>Fecha Nacimiento:</strong> {dicomData.patientBirthDate}</p>
                         <p><strong>Sexo:</strong> {dicomData.patientSex} / {paciente.sexo} </p>
                         <p><strong>ID del Estudio:</strong> {dicomData.studyInstanceUID} / {paciente._id}</p>
                         <p><strong>Fecha del Estudio:</strong> {dicomData.studyDate}</p>
                         <p><strong>Nombre Institución:</strong> {dicomData.institutionName}</p>
                         <p><strong>Modalidad:</strong> {dicomData.modality}</p>
-                        <p><strong>Numero Imagen:</strong> {dicomData.imageNumber}</p>
+                        <p><strong>Número de Imagen:</strong> {dicomData.imageNumber}</p>
                     </div>
                 )}
                 <div>
                     <input type="file" onChange={onFileChange} />
                     <button onClick={onFileUpload}>Enviar Imagen</button>
-                    <div id="dicomImage" style={{width: '512px', height: '512px'}}></div>
+                    <div 
+                        id="dicomImage" 
+                        style={{ 
+                            width: '512px', 
+                            height: '512px', 
+                            filter: `brightness(${brightness}%) contrast(${contrast}%) sepia(${sepia}%) invert(${invert}%) hue-rotate(${hueRotate}deg)`, 
+                            cursor: isDragging ? 'grabbing' : 'grab'
+                        }}
+                        onMouseDown={onMouseDown}
+                        onMouseMove={onMouseMove}
+                        onMouseUp={onMouseUp}
+                        onMouseLeave={onMouseUp}
+                        onWheel={onWheel}
+                    ></div>
+                    <div>
+                        <label>Zoom:</label>
+                        <input 
+                            type="range" 
+                            min="1" 
+                            max="5" 
+                            step="0.01" 
+                            value={zoom} 
+                            onChange={(e) => setZoom(Number(e.target.value))} 
+                        />
+                    </div>
+                    <div>
+                        <label>Rotación:</label>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="360" 
+                            step="1" 
+                            value={rotation} 
+                            onChange={(e) => setRotation(Number(e.target.value))} 
+                        />
+                    </div>
+                    <div>
+                        <label>Brillo:</label>
+                        <input 
+                            type="range" 
+                            min="20" 
+                            max="300" 
+                            step="1" 
+                            value={brightness} 
+                            onChange={(e) => setBrightness(Number(e.target.value))} 
+                        />
+                    </div>
+                    <div>
+                        <label>Contraste:</label>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="250" 
+                            step="1" 
+                            value={contrast} 
+                            onChange={(e) => setContrast(Number(e.target.value))} 
+                        />
+                    </div>
+                    <div>
+                        <label>Sepia:</label>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="100" 
+                            step="1" 
+                            value={sepia} 
+                            onChange={(e) => setSepia(Number(e.target.value))} 
+                        />
+                    </div>
+                    <div>
+                        <label>Invertir:</label>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="100" 
+                            step="1" 
+                            value={invert} 
+                            onChange={(e) => setInvert(Number(e.target.value))} 
+                        />
+                    </div>
+                    <div>
+                        <label>Hue-Rotate:</label>
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="360" 
+                            step="1" 
+                            value={hueRotate} 
+                            onChange={(e) => setHueRotate(Number(e.target.value))} 
+                        />
+                    </div>
                 </div>
             </div>
         </div>
     );
 }
-
-
 
 export default Dicom;
