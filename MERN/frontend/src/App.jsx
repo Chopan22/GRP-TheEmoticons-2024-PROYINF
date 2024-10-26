@@ -12,7 +12,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Config from './pages/Config'
 import PacienteForm from './pages/AddPacientes'
-
+import Examenes from './pages/Examenes'
 
 
 function App() {
@@ -29,6 +29,7 @@ function App() {
 						<Route path="/login" element={!user ? <Login/> : <Navigate to="/" />}/>
 						<Route path="/signup" element={!user ? <Signup/> : <Navigate to="/" />}/>
 						<Route path="/config" element={<Config />}/>
+						<Route path="/examenes" element={<Examenes />}/>
 						<Route path="/adduser" element={<PacienteForm />}/> 
 
 						
@@ -38,6 +39,7 @@ function App() {
 		</div>
 	)
 }
+
 
 
 
