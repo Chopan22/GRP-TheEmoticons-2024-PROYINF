@@ -3,12 +3,10 @@ const { Schema } = mongoose;
 
 
 const dicomSchema = new Schema({
-  patientName: { type: String, required: true },
-  studyDate: { type: String, required: true },
-  modality: { type: String, required: true },
-  fileId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'dicom.files' }
+  filename: { type: String, required: false },
+  data: { type: Buffer, required: true },
+  contentType: { type: String, required: true },
 });
 
 const Dicom = mongoose.model('Dicom', dicomSchema, 'Dicom');
 module.exports = Dicom;
-
