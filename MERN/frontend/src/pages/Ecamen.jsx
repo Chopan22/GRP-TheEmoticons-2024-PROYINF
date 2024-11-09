@@ -3,25 +3,13 @@ import DicomViewer from '../components/DicomViewer';
 import DicomUpload from '../components/DicomUpload';
 
 const Examen = () => {
-  const [dicomId, setDicomId] = useState(''); // Replace with an actual DICOM ID
-
-  const handleChange = (event) => {
-    setDicomId(event.target.value);
-  };
-
   return (
-    <div>
-      <h1>DICOM Viewer App</h1>
-      <label>
-        Enter DICOM ID:
-        <input type="text" value={dicomId} onChange={handleChange} />
-      </label>
-      {dicomId && <DicomViewer dicomId={dicomId} />}
-
-      <h1>DICOM Image Upload</h1>
-      <DicomUpload />
+    <div className="App">
+        <h1>DICOM Uploader</h1>
+        <DicomUpload />
+        <DicomViewer />
     </div>
-  );
+);
 };
 
 export default Examen;
