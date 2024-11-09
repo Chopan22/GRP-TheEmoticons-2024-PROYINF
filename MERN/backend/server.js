@@ -20,9 +20,9 @@ app.use((req, res, next) => {
 });
 
 
-
 app.use('/api/pacientes', pacientesRoutes);
 app.use('/api/usuarios', usuariosRoutes);
+app.use('/api/upload', examenRoutes);
 
 // Conectarse a la BD 
 mongoose.connect(process.env.MONGO_URI)
