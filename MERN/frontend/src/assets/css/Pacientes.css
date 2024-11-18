@@ -1,9 +1,0 @@
-.pacientes{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-content: space-around;
-    text-align: center;
-    
-}
