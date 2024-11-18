@@ -1,0 +1,1 @@
+Se muestra resultado del cambio realizado tras una nueva ejecución de Sonarqube
